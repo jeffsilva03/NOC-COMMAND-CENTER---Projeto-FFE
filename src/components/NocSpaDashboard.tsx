@@ -1,6 +1,10 @@
 import type { ReactNode } from 'react';
 
 import {
+  ErrorBoundary,
+} from './ErrorBoundary';
+
+import {
   Activity,
   AlertTriangle,
   Car,
@@ -1379,32 +1383,37 @@ export function NocSpaDashboard({
       {/* LOGS E INCIDENTES REAIS */}
       {/* ===================================== */}
 
-      <IncidentConsole
-        logs={logs}
-        incidents={
-          incidentes
-        }
-      />
+      <ErrorBoundary
+  sectionName="Logs e Incidentes"
+>
+  <IncidentConsole
+    logs={logs}
+    incidents={
+      incidentes
+    }
+  />
+</ErrorBoundary>
 
       {/* ===================================== */}
       {/* CRUD REAL */}
       {/* ===================================== */}
 
-      <section
-        className="
-          border-t
-          border-slate-800
-        "
-      >
-
-        <BancoDados
-          onAlteracao={
-            onAlteracao
-          }
-        />
-
-      </section>
-
+      <ErrorBoundary
+  sectionName="Banco de Dados / API"
+>
+  <section
+    className="
+      border-t
+      border-slate-800
+    "
+  >
+    <BancoDados
+      onAlteracao={
+        onAlteracao
+      }
+    />
+  </section>
+</ErrorBoundary>
     </div>
   );
 }

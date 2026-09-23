@@ -113,6 +113,24 @@ export function IncidentConsole({
   logs,
   incidents,
 }: IncidentConsoleProps) {
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const testError =
+    params.get(
+      'testError'
+    );
+
+  if (
+    testError === 'logs'
+  ) {
+    throw new Error(
+      'Falha controlada para auditoria do Error Boundary.'
+    );
+  }
+
   return (
     <section
       className="
