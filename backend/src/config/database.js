@@ -91,6 +91,27 @@ function all(
   );
 }
 
+function get(
+  sql,
+  params = []
+) {
+  return new Promise(
+    (resolve, reject) => {
+      db.get(
+        sql,
+        params,
+        (error, row) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          resolve(row);
+        }
+      );
+    }
+  );
+}
 
 // ==========================================
 // MIGRAÇÃO DA TABELA LINKS ANTIGA
@@ -141,6 +162,204 @@ async function recriarTabelaLinksLegada() {
   );
 }
 
+async function popularFrotaSeVazia() {
+  const resultado =
+    await get(`
+      SELECT COUNT(*) AS total
+      FROM frota
+    `);
+
+  if (
+    Number(resultado.total) > 0
+  ) {
+    console.log(
+      `✅ Frota existente: ${resultado.total} veículos.`
+    );
+
+    return;
+  }
+
+  console.log(
+    '🚚 Banco vazio. Gerando 100.000 veículos...'
+  );
+
+  const categorias = [
+    'Ônibus',
+    'Caminhão',
+    'Moto',
+    'Carro',
+    'Caminhonete',
+    'Van',
+    'SUV',
+    'Esportivo',
+    'Trator',
+    'Ambulância',
+  ];
+
+  await new Promise(
+    (resolve, reject) => {
+      db.serialize(() => {
+        db.run(
+          'BEGIN TRANSACTION',
+          (beginError) => {
+            if (beginError) {
+              reject(beginError);
+              return;
+            }
+
+            const statement =
+              db.prepare(`
+                INSERT INTO frota
+                (
+                  id,
+                  modelo,
+                  tipo,
+                  vel,
+                  latitude,
+                  longitude
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
+              `);
+
+            let insertError =
+              null;
+
+            for (
+              let i = 1;
+              i <= 100000;
+              i++
+            ) {
+              const categoria =
+                categorias[
+                  (i - 1) %
+                  categorias.length
+                ];
+
+              const modelo =
+                `${categoria} Modelo ${
+                  (
+                    (i - 1) %
+                    20
+                  ) + 1
+                }`;
+
+              const velocidade =
+                String(
+                  30 +
+                  (
+                    i * 7
+                  ) %
+                  91
+                );
+
+              const latitude =
+                (
+                  -23 -
+                  (
+                    (
+                      i * 37
+                    ) %
+                    10000
+                  ) /
+                  10000
+                ).toFixed(6);
+
+              const longitude =
+                (
+                  -46 -
+                  (
+                    (
+                      i * 53
+                    ) %
+                    10000
+                  ) /
+                  10000
+                ).toFixed(6);
+
+              statement.run(
+                [
+                  `V-${String(i)
+                    .padStart(
+                      6,
+                      '0'
+                    )}`,
+
+                  modelo,
+
+                  categoria,
+
+                  velocidade,
+
+                  latitude,
+
+                  longitude,
+                ],
+                (error) => {
+                  if (
+                    error &&
+                    !insertError
+                  ) {
+                    insertError =
+                      error;
+                  }
+                }
+              );
+            }
+
+            statement.finalize(
+              (finalizeError) => {
+                const error =
+                  finalizeError ||
+                  insertError;
+
+                if (error) {
+                  db.run(
+                    'ROLLBACK',
+                    () => {
+                      reject(
+                        error
+                      );
+                    }
+                  );
+
+                  return;
+                }
+
+                db.run(
+                  'COMMIT',
+                  (commitError) => {
+                    if (
+                      commitError
+                    ) {
+                      reject(
+                        commitError
+                      );
+
+                      return;
+                    }
+
+                    console.log(
+                      '✅ 100.000 veículos inseridos no SQLite.'
+                    );
+
+                    resolve();
+                  }
+                );
+              }
+            );
+          }
+        );
+      });
+    }
+  );
+
+  await run(`
+    CREATE INDEX
+    IF NOT EXISTS
+    idx_frota_tipo
+    ON frota(tipo)
+  `);
+}
 
 // ==========================================
 // INICIALIZAÇÃO DO BANCO
@@ -172,6 +391,29 @@ async function inicializarBanco() {
     )
   `);
 
+  await run(`
+  CREATE TABLE IF NOT EXISTS frota (
+    id TEXT PRIMARY KEY,
+
+    modelo TEXT,
+
+    tipo TEXT,
+
+    vel TEXT,
+
+    latitude TEXT,
+
+    longitude TEXT,
+
+    ultima_atualizacao
+      DATETIME
+      DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
+await popularFrotaSeVazia();
+
+await recriarTabelaLinksLegada();
 
   // ========================================
   // VERIFICA VERSÃO ANTIGA DOS LINKS

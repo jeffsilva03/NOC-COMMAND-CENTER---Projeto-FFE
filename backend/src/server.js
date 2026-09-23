@@ -19,7 +19,7 @@ const app =
   express();
 
 const PORT =
-  3000;
+  process.env.PORT || 3000;
 
 
 // CORS
@@ -68,11 +68,10 @@ app.use(
 
 app.listen(
   PORT,
+  '0.0.0.0',
   () => {
-
     console.log(
-      `🚀 Servidor operando em http://localhost:${PORT}`
+      `🚀 Servidor operando na porta ${PORT}`
     );
-
   }
 );
