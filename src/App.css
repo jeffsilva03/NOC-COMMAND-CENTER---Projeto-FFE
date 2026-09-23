@@ -316,3 +316,404 @@ code {
     height: 135px;
   }
 }
+
+
+/* =========================================================
+   BANCO DE DADOS / CRUD
+   ========================================================= */
+
+.crud-page {
+  min-height: calc(100vh - 130px);
+  padding: 30px 38px 50px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(0, 217, 255, 0.05),
+      transparent 38%
+    ),
+    #15181d;
+  color: #e8edf2;
+}
+
+.crud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.crud-header h2 {
+  margin: 0;
+  color: #f5c542;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.crud-header p {
+  margin: 7px 0 0;
+  color: #7f8a96;
+  font-size: 13px;
+}
+
+.crud-limit-btn {
+  padding: 9px 14px;
+  color: #62c8ff;
+  background: rgba(26, 52, 68, 0.45);
+  border: 1px solid #3c99c8;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.crud-limit-btn:hover {
+  background: rgba(46, 132, 180, 0.25);
+}
+
+.crud-divider {
+  height: 1px;
+  margin: 22px 0 28px;
+  background: linear-gradient(
+    90deg,
+    #32d9ff,
+    rgba(50, 217, 255, 0.1)
+  );
+}
+
+.crud-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 42px;
+}
+
+/* =========================
+   PAINEL ESQUERDO
+   ========================= */
+
+.crud-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.crud-panel {
+  padding: 22px 0;
+}
+
+.crud-panel h3 {
+  margin-bottom: 22px;
+  color: #f5c542;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.crud-panel h3 span {
+  margin-right: 8px;
+  color: #8a75ff;
+}
+
+.crud-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.crud-form label {
+  color: #7f8a96;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.crud-form input,
+.crud-form select {
+  width: 100%;
+  padding: 10px 12px;
+  color: #e7edf3;
+  background: #1c2026;
+  border: 1px solid #3b424a;
+  border-radius: 5px;
+  outline: none;
+}
+
+.crud-form input:focus,
+.crud-form select:focus {
+  border-color: #36d9ff;
+  box-shadow: 0 0 0 2px rgba(54, 217, 255, 0.08);
+}
+
+.crud-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.crud-form-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.crud-post-btn {
+  margin-top: 8px;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  background: #66d994;
+  color: #102219;
+  font-weight: 800;
+  transition: 0.2s;
+}
+
+.crud-post-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+/* =========================
+   TERMINAL
+   ========================= */
+
+.crud-terminal {
+  border-top: 1px solid #3a4048;
+  padding-top: 18px;
+}
+
+.crud-terminal h4 {
+  color: #8796a5;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.crud-terminal-content {
+  min-height: 125px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  background: rgba(10, 12, 15, 0.45);
+  color: #6f7c88;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+}
+
+.crud-terminal-content div + div {
+  margin-top: 5px;
+}
+
+/* =========================
+   TABELA
+   ========================= */
+
+.crud-table-panel {
+  min-width: 0;
+}
+
+.crud-table-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.crud-table-title h3 {
+  margin: 0;
+  color: #68d9ff;
+  font-size: 18px;
+}
+
+.crud-table-title span {
+  display: inline-block;
+  margin-top: 6px;
+  color: #82909c;
+  font-size: 12px;
+}
+
+.crud-count {
+  padding: 7px 11px;
+  border: 1px solid #3c99c8;
+  border-radius: 4px;
+  color: #62c8ff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.crud-table-wrapper {
+  max-height: 630px;
+  overflow: auto;
+  border-top: 1px solid #3a424a;
+  border-bottom: 1px solid #3a424a;
+}
+
+.crud-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.crud-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 14px 10px;
+  background: #171a1f;
+  color: #a5afb9;
+  border-bottom: 1px solid #343a40;
+  font-size: 12px;
+  text-align: left;
+}
+
+.crud-table td {
+  padding: 11px 10px;
+  border-bottom: 1px solid rgba(100, 110, 120, 0.15);
+  color: #cfd6dc;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.crud-table tbody tr:hover {
+  background: rgba(49, 205, 255, 0.04);
+}
+
+.crud-id {
+  color: #55d8ff !important;
+  font-family: Consolas, monospace;
+  font-weight: 700;
+}
+
+.crud-icon {
+  font-size: 18px !important;
+}
+
+.crud-speed {
+  padding: 4px 7px;
+  border-radius: 5px;
+  background: #555d68;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.crud-gps {
+  color: #d2a654 !important;
+  font-family: Consolas, monospace;
+  font-size: 11px !important;
+}
+
+.crud-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.crud-put-btn,
+.crud-delete-btn {
+  border: 0;
+  border-radius: 4px;
+  padding: 7px 9px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.crud-put-btn {
+  background: #ffc633;
+  color: #251c00;
+}
+
+.crud-delete-btn {
+  background: #ff5367;
+  color: white;
+}
+
+.crud-put-btn:hover,
+.crud-delete-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* =========================
+   MODAL PUT
+   ========================= */
+
+.crud-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+}
+
+.crud-modal {
+  width: min(460px, 100%);
+  padding: 24px;
+  border: 1px solid #ffc633;
+  border-radius: 8px;
+  background: #181c21;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+}
+
+.crud-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.crud-modal-header h3 {
+  margin: 7px 0 0;
+  color: white;
+  font-size: 18px;
+}
+
+.crud-modal-method {
+  color: #ffc633;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.crud-modal-close {
+  border: 0;
+  background: transparent;
+  color: #89939d;
+  font-size: 19px;
+}
+
+.crud-update-confirm {
+  margin-top: 10px;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  background: #ffc633;
+  color: #231c00;
+  font-weight: 800;
+}
+
+/* =========================
+   RESPONSIVO
+   ========================= */
+
+@media (max-width: 1000px) {
+  .crud-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .crud-sidebar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .crud-page {
+    padding: 20px 15px 40px;
+  }
+
+  .crud-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .crud-form-row {
+    grid-template-columns: 1fr;
+  }
+}
